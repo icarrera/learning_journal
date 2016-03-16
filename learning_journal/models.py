@@ -1,11 +1,14 @@
 from sqlalchemy import (
     Column,
+    DateTime,
     Index,
     Integer,
-    Text,
+    Unicode,
+    UnicodeText,
     )
 
 from sqlalchemy.ext.declarative import declarative_base
+import datetime
 
 from sqlalchemy.orm import (
     scoped_session,
@@ -18,10 +21,11 @@ DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
 Base = declarative_base()
 
 
-class MyModel(Base):
-    __tablename__ = 'models'
+class Entry(Base):
+    __tablename__ = 'entries'
     id = Column(Integer, primary_key=True)
-    name = Column(Text)
-    value = Column(Integer)
+    title = Column(UnicodeText)
+    text = Column(Unicode)
+    created = Column(DateTime, onupdate=datetime.datetime.utcnow)
 
-Index('my_index', MyModel.name, unique=True, mysql_length=255)
+Index('entry_index', Entry.title, unique=True)
