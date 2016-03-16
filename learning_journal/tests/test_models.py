@@ -1,4 +1,4 @@
-
+# -*- coding: utf-8 -*-
 
 from learning_journal.models import Entry, DBSession
 
