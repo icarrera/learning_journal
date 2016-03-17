@@ -8,7 +8,7 @@ from sqlalchemy import (
     )
 
 from sqlalchemy.ext.declarative import declarative_base
-from datetime import datetime
+import datetime
 import psycopg2
 
 from sqlalchemy.orm import (
@@ -32,5 +32,3 @@ class Entry(Base):
     created = Column(DateTime, default=datetime.datetime.utcnow)
 
 
-
-Index('entry_index', Entry.title, unique=True)

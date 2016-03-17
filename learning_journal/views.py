@@ -16,9 +16,11 @@ def list_view(request):
     return {'entries': DBSession.query(Entry).all()}
 
 
-@view_config(route_name='detail', renderer='templates/detail_view.jinja2')
+@view_config(route_name='detail_view', renderer='templates/detail_view.jinja2')
 def detail_view(request):
-    return {'entry': DBSession.query(Entry).one()}
+    this_id = request.matchdict['this_id']
+    entry = DBSession.query(Entry).filter(Entry.id == this_id).first()
+    return {'entry': entry}
 
 # @view_config(route_name='home', renderer='templates/list_view.jinja2')
 # def my_view(request):
