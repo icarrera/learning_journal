@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import pytest
 from sqlalchemy import create_engine
-
 from learning_journal.models import DBSession, Base
 
 
