@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from learning_journal.models import Entry, DBSession
 
-
 def test_create_entry(dbtransaction):
     """Assert entry was entered into database."""
     new_entry = Entry(title="Entry1", text="Hey, this works. Awesome.")
