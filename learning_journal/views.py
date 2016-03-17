@@ -9,9 +9,12 @@ from .models import (
     )
 
 
+
+
 @view_config(route_name='home', renderer='templates/list_view.jinja2')
 def list_view(request):
-    return {'title': 'first entry', 'date': 'today'}
+    return {'entries': DBSession.query(Entry).all()}
+
 
 @view_config(route_name='detail', renderer='templates/detail_view.jinja2')
 def detail_view(request):

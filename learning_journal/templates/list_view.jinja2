@@ -1,3 +1,6 @@
 
 
-<h1>{{ title }} created:{{ date }}</h1>
+{% for entry in entries %}
+<p>{{entry.title}}</p>
+<p>{{entry.created}}</p>
+{% endfor %}
