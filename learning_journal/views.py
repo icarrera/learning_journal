@@ -9,6 +9,11 @@ from .models import (
     )
 
 
+@view_config(route_name='home', renderer='templates/list_view.html')
+def list_view(request):
+    return Response({ entry_list })
+
+
 @view_config(route_name='home', renderer='templates/mytemplate.pt')
 def my_view(request):
     try:
