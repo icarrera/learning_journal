@@ -18,7 +18,7 @@ def list_view(request):
 
 @view_config(route_name='detail', renderer='templates/detail_view.jinja2')
 def detail_view(request):
-    return {'title': 'first entry', 'id': 'zomg her is our first entry text'}
+    return {'entry': DBSession.query(Entry).one()}
 
 # @view_config(route_name='home', renderer='templates/list_view.jinja2')
 # def my_view(request):

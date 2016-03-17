@@ -1,3 +1,5 @@
 
-
-<p>{{ text }}</p>
+{% block content %}
+    <p>{{entry.title}}</p>
+    <p>{{entry.text}}</p>
+{% endblock %}
