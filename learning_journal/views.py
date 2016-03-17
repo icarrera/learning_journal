@@ -9,18 +9,18 @@ from .models import (
     )
 
 
-@view_config(route_name='home', renderer='templates/list_view.html')
+@view_config(route_name='home', renderer='templates/list_view.jinja2')
 def list_view(request):
-    return Response({ entry_list })
+    return {'one': 'one'}
 
 
-@view_config(route_name='home', renderer='templates/mytemplate.pt')
-def my_view(request):
-    try:
-        one = DBSession.query(Entry).filter(Entry.title == 'one').first()
-    except DBAPIError:
-        return Response(conn_err_msg, content_type='text/plain', status_int=500)
-    return {'one': one, 'project': 'learning_journal'}
+# @view_config(route_name='home', renderer='templates/list_view.jinja2')
+# def my_view(request):
+#     try:
+#         one = DBSession.query(Entry).filter(Entry.title == 'one').first()
+#     except DBAPIError:
+#         return Response(conn_err_msg, content_type='text/plain', status_int=500)
+#     return {'one': one, 'project': 'learning_journal'}
 
 
 conn_err_msg = """
