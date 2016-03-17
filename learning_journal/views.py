@@ -11,8 +11,11 @@ from .models import (
 
 @view_config(route_name='home', renderer='templates/list_view.jinja2')
 def list_view(request):
-    return {'one': 'one'}
+    return {'title': 'first entry', 'date': 'today'}
 
+@view_config(route_name='detail', renderer='templates/detail_view.jinja2')
+def detail_view(request):
+    return {'title': 'first entry', 'id': 'zomg her is our first entry text'}
 
 # @view_config(route_name='home', renderer='templates/list_view.jinja2')
 # def my_view(request):
