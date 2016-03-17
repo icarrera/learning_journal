@@ -22,6 +22,9 @@ def detail_view(request):
     entry = DBSession.query(Entry).filter(Entry.id == this_id).first()
     return {'entry': entry}
 
+
+
+
 # @view_config(route_name='home', renderer='templates/list_view.jinja2')
 # def my_view(request):
 #     try:
