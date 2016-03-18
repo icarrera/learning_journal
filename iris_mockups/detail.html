@@ -3,22 +3,40 @@
     <head>
         <meta charset="utf-8">
         <title>Learning Journal</title>
-        <link rel="stylesheet" href="vendor/styles/normalize.css">
-        <link rel="stylesheet" href="vendor/styles/skeleton.css">
-        <link rel="stylesheet" href="styles/base.css">
-        <link rel="stylesheet" href="styles/layout.css">
-        <link rel="stylesheet" href="styles/module.css">
-        <link rel="stylesheet" href="styles/state.css">
+        <link rel="stylesheet" type="text/css" href="vendor/styles/normalize.css">
+        <link rel="stylesheet" type="text/css" href="vendor/styles/skeleton.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" type="text/css" href="styles/base.css">
+        <link rel="stylesheet" type="text/css" href="styles/layout.css">
+        <link rel="stylesheet" type="text/css" href="styles/module.css">
+        <link rel="stylesheet" type="text/css" href="styles/state.css">
     </head>
     <body>
-        <header>Iris's Learning Journal</header>
-        <nav>
+        <header class="main_header">
+            <h1>Iris's Learning Journal</h1>
+        </header>
+        <nav class="nav_links">
             <ul>
                 <li><a href="home.html">Home</a></li>
-                <li><a href="detail.html">Read</a></li>
-                <li><a href="edit_entry.html">Edit Post</a></li>
                 <li><a href="new_entry.html">New Post</a></li>
             </ul>
         </nav>
+        <section>
+            <h2>Entry Title Here <i>Year-Month-Day</i></h2>
+            <article>
+                <p>Method integration functools 2to3 python script functools. Method raspberrypi coroutine unit
+                    python map gil jinja object. Dunder integration mercurial dict reduce scipy functools.
+                    Future raspberrypi generator.</p>
+
+                <p>Method raspberrypi decorator unit kwargs import. Future raspberrypi diversity dict lambda dunder functools.
+                    Method integration coroutine pypy reduce class bdfl tuple. Dunder integration diversity 2to3 cython raise.
+                    Future integration mercurial pypy return gevent. Gevent integration decorator pypi django pycon.
+                    Import raspberrypi beautiful.</p>
+            </article>
+            <form action="edit_entry.html">
+                <input type="submit" value="Edit">
+            </form>
+        </section>
+
     </body>
 </html>

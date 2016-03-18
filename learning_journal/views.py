@@ -1,7 +1,9 @@
 from pyramid.response import Response
 from pyramid.view import view_config
-
+from pyramid.httpexceptions import HTTPFound
+from .form import JournalForm
 from sqlalchemy.exc import DBAPIError
+import transaction
 
 from .models import (
     DBSession,
@@ -13,25 +15,39 @@ from .models import (
 
 @view_config(route_name='home', renderer='templates/list_view.jinja2')
 def list_view(request):
+    """Handle the view of our home page."""
     return {'entries': DBSession.query(Entry).all()}
 
 
 @view_config(route_name='detail_view', renderer='templates/detail_view.jinja2')
 def detail_view(request):
+    """Handle the view of a single journaly entry."""
     this_id = request.matchdict['this_id']
     entry = DBSession.query(Entry).filter(Entry.id == this_id).first()
     return {'entry': entry}
 
 
+@view_config(route_name='add_view', renderer='templates/add_view.jinja2')
+def add_view(request):
+    """Handle the view of our adding new entry page."""
+    form = JournalForm(request.POST)
+    if request.method == "POST" and form.validate():
+        new_entry = Entry(title=form.title.data, text=form.text.data)
+        DBSession.add(new_entry)
+        DBSession.flush()
+        this_id = new_entry.id
+        transaction.commit()
+        raise HTTPFound(location='/detail/{}'.format(this_id))
+    return {'form': form}
 
 
-# @view_config(route_name='home', renderer='templates/list_view.jinja2')
-# def my_view(request):
-#     try:
-#         one = DBSession.query(Entry).filter(Entry.title == 'one').first()
-#     except DBAPIError:
-#         return Response(conn_err_msg, content_type='text/plain', status_int=500)
-#     return {'one': one, 'project': 'learning_journal'}
+
+
+@view_config(route_name='edit_view', renderer='templates/edit_view.jinja2')
+def edit_view(request):
+    """Handle the view of our edit entry page."""
+    pass
+
 
 
 conn_err_msg = """
