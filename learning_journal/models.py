@@ -1,7 +1,6 @@
 from sqlalchemy import (
     Column,
     DateTime,
-    Index,
     Integer,
     Unicode,
     UnicodeText,
@@ -30,5 +29,3 @@ class Entry(Base):
     title = Column(Unicode(128), unique=True)
     text = Column(UnicodeText)
     created = Column(DateTime, default=datetime.datetime.utcnow)
-
-
