@@ -3,6 +3,7 @@ from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
 from .form import JournalForm
 from sqlalchemy.exc import DBAPIError
+from sqlalchemy import desc
 import transaction
 
 from .models import (
@@ -16,7 +17,7 @@ from .models import (
 @view_config(route_name='home', renderer='templates/list_view.jinja2')
 def list_view(request):
     """Handle the view of our home page."""
-    return {'entries': DBSession.query(Entry).all()}
+    return {'entries': DBSession.query(Entry).order_by(desc(Entry.created)).all()}
 
 
 @view_config(route_name='detail_view', renderer='templates/detail_view.jinja2')
