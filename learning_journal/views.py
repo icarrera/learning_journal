@@ -9,13 +9,29 @@ from .models import (
     )
 
 
-@view_config(route_name='home', renderer='templates/mytemplate.pt')
-def my_view(request):
-    try:
-        one = DBSession.query(Entry).filter(Entry.title == 'one').first()
-    except DBAPIError:
-        return Response(conn_err_msg, content_type='text/plain', status_int=500)
-    return {'one': one, 'project': 'learning_journal'}
+
+
+@view_config(route_name='home', renderer='templates/list_view.jinja2')
+def list_view(request):
+    return {'entries': DBSession.query(Entry).all()}
+
+
+@view_config(route_name='detail_view', renderer='templates/detail_view.jinja2')
+def detail_view(request):
+    this_id = request.matchdict['this_id']
+    entry = DBSession.query(Entry).filter(Entry.id == this_id).first()
+    return {'entry': entry}
+
+
+
+
+# @view_config(route_name='home', renderer='templates/list_view.jinja2')
+# def my_view(request):
+#     try:
+#         one = DBSession.query(Entry).filter(Entry.title == 'one').first()
+#     except DBAPIError:
+#         return Response(conn_err_msg, content_type='text/plain', status_int=500)
+#     return {'one': one, 'project': 'learning_journal'}
 
 
 conn_err_msg = """
