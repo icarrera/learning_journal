@@ -3,22 +3,43 @@
     <head>
         <meta charset="utf-8">
         <title>Learning Journal</title>
-        <link rel="stylesheet" href="vendor/styles/normalize.css">
-        <link rel="stylesheet" href="vendor/styles/skeleton.css">
-        <link rel="stylesheet" href="styles/base.css">
-        <link rel="stylesheet" href="styles/layout.css">
-        <link rel="stylesheet" href="styles/module.css">
-        <link rel="stylesheet" href="styles/state.css">
+        <link rel="stylesheet" type="text/css" href="vendor/styles/normalize.css">
+        <link rel="stylesheet" type="text/css" href="vendor/styles/skeleton.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" type="text/css" href="styles/base.css">
+        <link rel="stylesheet" type="text/css" href="styles/layout.css">
+        <link rel="stylesheet" type="text/css" href="styles/module.css">
+        <link rel="stylesheet" type="text/css" href="styles/state.css">
     </head>
     <body>
-        <header>Iris's Learning Journal</header>
-        <nav>
+        <header class="main_header">
+            <h1>Iris's Learning Journal</h1>
+        </header>
+        <nav class="nav_links">
             <ul>
                 <li><a href="home.html">Home</a></li>
-                <li><a href="detail.html">Read</a></li>
-                <li><a href="edit_entry.html">Edit Post</a></li>
                 <li><a href="new_entry.html">New Post</a></li>
             </ul>
         </nav>
+        <article>
+            <h3>Entries</h3>
+            <ul id="entry_list">
+                <li>
+                    <h5><a href="detail.html">Day 15</a> <i>2016-03-17</i></h5>
+                </li>
+                <li>
+                    <h5><a href="detail.html">2 weeks in.</a> <i>2016-03-11</i></h5>
+                </li>
+                <li>
+                    <h5><a href="detail.html">Day 09</a> <i>2016-03-10</i></h5>
+                </li>
+                <li>
+                    <h5><a href="detail.html">Day 05</a> <i>2016-03-04</i></h5>
+                </li>
+                <li>
+                    <h5><a href="detail.html">First entry!</a> <i>2016-02-29</i></h5>
+                </li>
+            </ul>
+        </article>
     </body>
 </html>

@@ -1,0 +1,28 @@
+.nav_links {
+    border-radius: 5px;
+    margin-bottom: 1%;
+}
+
+.nav_links li {
+    display: inline;
+    padding: 3%;
+    text-decoration: none;
+    font-size: 2em;
+}
+
+.nav_links ul {
+    text-align: center;
+}
+
+.main_header {
+    text-align: center;
+    background-color: #D44C46;
+    border-radius: 5px;
+    padding: 2%;
+}
+
+.main_header h1 {
+    padding-top: 1%;
+    font-weight: bold;
+    font-size: 4em;
+}
