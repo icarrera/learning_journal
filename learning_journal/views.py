@@ -42,7 +42,6 @@ def add_view(request):
 @view_config(route_name='edit_view', renderer='templates/edit_view.jinja2')
 def edit_view(request):
     """Handle the view of our edit entry page."""
-    # import pdb; pdb.set_trace()
     this_id = request.matchdict['this_id']
     entry = DBSession.query(Entry).get(this_id)
     form = JournalForm(request.POST, entry)
@@ -50,7 +49,7 @@ def edit_view(request):
         form.populate_obj(entry)
         this_id = entry.id
         return HTTPFound(location='/detail/{}'.format(this_id))
-    return {'form': form, 'entry': entry}
+    return {'form': form}
 
 
 conn_err_msg = """
