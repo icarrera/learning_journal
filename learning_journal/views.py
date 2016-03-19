@@ -12,8 +12,6 @@ from .models import (
     )
 
 
-
-
 @view_config(route_name='home', renderer='templates/list_view.jinja2')
 def list_view(request):
     """Handle the view of our home page."""
@@ -37,18 +35,22 @@ def add_view(request):
         DBSession.add(new_entry)
         DBSession.flush()
         this_id = new_entry.id
-        transaction.commit()
-        raise HTTPFound(location='/detail/{}'.format(this_id))
+        return HTTPFound(location='/detail/{}'.format(this_id))
     return {'form': form}
-
-
 
 
 @view_config(route_name='edit_view', renderer='templates/edit_view.jinja2')
 def edit_view(request):
     """Handle the view of our edit entry page."""
-    pass
-
+    # import pdb; pdb.set_trace()
+    this_id = request.matchdict['this_id']
+    entry = DBSession.query(Entry).get(this_id)
+    form = JournalForm(request.POST, entry)
+    if request.method == 'POST' and form.validate():
+        form.populate_obj(entry)
+        this_id = entry.id
+        return HTTPFound(location='/detail/{}'.format(this_id))
+    return {'form': form, 'entry': entry}
 
 
 conn_err_msg = """
