@@ -2,4 +2,6 @@
 {% block content %}
     <h2>{{entry.title}}</h2>
     <p>{{entry.text}}</p>
+    <a href="{{request.route_url('edit_view', this_id=entry.id)}}"><button>Edit Entry</button></a>
+
 {% endblock %}
