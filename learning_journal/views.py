@@ -5,6 +5,7 @@ from .form import JournalForm
 from sqlalchemy.exc import DBAPIError
 from sqlalchemy import desc
 import transaction
+import markdown
 
 from .models import (
     DBSession,
@@ -21,9 +22,11 @@ def list_view(request):
 @view_config(route_name='detail_view', renderer='templates/detail_view.jinja2')
 def detail_view(request):
     """Handle the view of a single journaly entry."""
+    md = markdown.Markdown(safe_mode='replace', html_replacement_text='NO')
     this_id = request.matchdict['this_id']
     entry = DBSession.query(Entry).filter(Entry.id == this_id).first()
-    return {'entry': entry}
+    text = md.convert(entry.text)
+    return {'entry': entry, 'text': text}
 
 
 @view_config(route_name='add_view', renderer='templates/add_view.jinja2')

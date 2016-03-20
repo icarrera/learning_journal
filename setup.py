@@ -19,7 +19,7 @@ requires = [
     'waitress',
     'psycopg2',
     'markdown',
-    'wtforms'
+    'wtforms',
     ]
 
 tests_require = ['pytest', 'pytest-watch', 'tox']
