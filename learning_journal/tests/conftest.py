@@ -3,9 +3,12 @@ import os
 import pytest
 from sqlalchemy import create_engine
 from learning_journal.models import DBSession, Base
+from pyramid.paster import get_appsettings
+from webtest import TestApp
+from learning_journal import main
 
 
-TEST_DATABASE_URL = os.environ.get("TESTDB_URL")
+TEST_DATABASE_URL = os.environ.get('TESTDB_URL')
 
 
 @pytest.fixture(scope='session')
@@ -34,3 +37,25 @@ def dbtransaction(request, sqlengine):
     request.addfinalizer(teardown)
 
     return connection
+
+
+@pytest.fixture()
+def dummy_post(dbtransaction):
+    from pyramid.testing import DummyRequest
+    from webob.multidict import MultiDict
+    req = DummyRequest()
+    req.method = 'POST'
+    md = MultiDict()
+    md.add('title', 'dummy title')
+    md.add('text', 'dummy text')
+    req.POST = md
+    return req
+
+
+@pytest.fixture()
+def app(config_path, dbtransaction, test_url):
+    """Create pretend app fixture of main app to test routing."""
+    settings = get_appsettings(config_path)
+    settings['sqlalchemy.url'] = test_url
+    app = main({}, **settings)
+    return TestApp(app)
