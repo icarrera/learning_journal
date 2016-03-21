@@ -24,7 +24,7 @@ def detail_view(request):
     """Handle the view of a single journaly entry."""
     md = markdown.Markdown(safe_mode='replace', html_replacement_text='NO')
     this_id = request.matchdict['this_id']
-    entry = DBSession.query(Entry).filter(Entry.id == this_id).first()
+    entry = DBSession.query(Entry).get(this_id)
     text = md.convert(entry.text)
     return {'entry': entry, 'text': text}
 
@@ -42,7 +42,7 @@ def add_view(request):
     return {'form': form}
 
 
-@view_config(route_name='edit_view', renderer='templates/edit_view.jinja2')
+@view_config(route_name='edit_view', renderer='templates/add_view.jinja2')
 def edit_view(request):
     """Handle the view of our edit entry page."""
     this_id = request.matchdict['this_id']

@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
+import os
 import pytest
 from sqlalchemy import create_engine
 from learning_journal.models import DBSession, Base
 
 
-TEST_DATABASE_URL = 'postgres://roboiris:secret@localhost:5432/test_journal'
+TEST_DATABASE_URL = os.environ.get("TESTDB_URL")
 
 
 @pytest.fixture(scope='session')
@@ -18,7 +19,6 @@ def sqlengine(request):
 
     request.addfinalizer(teardown)
     return engine
-
 
 @pytest.fixture()
 def dbtransaction(request, sqlengine):
