@@ -13,6 +13,7 @@ def make_session(settings):
     Session = sessionmaker(bind=engine)
     return Session()
 
+
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """

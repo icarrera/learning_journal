@@ -2,7 +2,7 @@
 import os
 import pytest
 from sqlalchemy import create_engine
-from learning_journal.models import DBSession, Base
+from learning_journal.models import DBSession, Base, Entry
 from pyramid.paster import get_appsettings
 from webtest import TestApp
 from learning_journal import main
@@ -23,7 +23,7 @@ def sqlengine(request):
     request.addfinalizer(teardown)
     return engine
 
-@pytest.fixture()
+@pytest.fixture(scope='function')
 def dbtransaction(request, sqlengine):
     connection = sqlengine.connect()
     transaction = connection.begin()
@@ -59,3 +59,27 @@ def app(config_path, dbtransaction, test_url):
     settings['sqlalchemy.url'] = test_url
     app = main({}, **settings)
     return TestApp(app)
+
+
+@pytest.fixture(scope='function')
+def new_entry(request, dbtransaction):
+"""Return a new Entry and flush to the database."""
+entry = Entry(title="test post", text="zomg testing")
+DBSession.add(entry)
+DBSession.flush()
+
+def teardown():
+    DBSession.query(Entry).filter(Entry.id == entry.id).delete()
+
+request.addfinalizer(teardown)
+return entry
+
+
+@pytest.fixture():
+def dummy_request():
+    request = testing.DummyRequest()
+    config = testing.setUp()
+    config.add_route('home', '/')
+    config.add_route('add_view', '/add')
+    config.add_route('detail_view', '/detail/{this_id}')
+    config.add_route('edit_view', '/edit/{this_id}')
