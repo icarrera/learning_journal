@@ -3,7 +3,9 @@ from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
 from .form import JournalForm
 from sqlalchemy.exc import DBAPIError
+from sqlalchemy import desc
 import transaction
+import markdown
 
 from .models import (
     DBSession,
@@ -11,20 +13,20 @@ from .models import (
     )
 
 
-
-
 @view_config(route_name='home', renderer='templates/list_view.jinja2')
 def list_view(request):
     """Handle the view of our home page."""
-    return {'entries': DBSession.query(Entry).all()}
+    return {'entries': DBSession.query(Entry).order_by(desc(Entry.created)).all()}
 
 
 @view_config(route_name='detail_view', renderer='templates/detail_view.jinja2')
 def detail_view(request):
     """Handle the view of a single journaly entry."""
+    md = markdown.Markdown(safe_mode='replace', html_replacement_text='NO')
     this_id = request.matchdict['this_id']
-    entry = DBSession.query(Entry).filter(Entry.id == this_id).first()
-    return {'entry': entry}
+    entry = DBSession.query(Entry).get(this_id)
+    text = md.convert(entry.text)
+    return {'entry': entry, 'text': text}
 
 
 @view_config(route_name='add_view', renderer='templates/add_view.jinja2')
@@ -36,18 +38,21 @@ def add_view(request):
         DBSession.add(new_entry)
         DBSession.flush()
         this_id = new_entry.id
-        transaction.commit()
-        raise HTTPFound(location='/detail/{}'.format(this_id))
+        return HTTPFound(location='/detail/{}'.format(this_id))
     return {'form': form}
 
 
-
-
-@view_config(route_name='edit_view', renderer='templates/edit_view.jinja2')
+@view_config(route_name='edit_view', renderer='templates/add_view.jinja2')
 def edit_view(request):
     """Handle the view of our edit entry page."""
-    pass
-
+    this_id = request.matchdict['this_id']
+    entry = DBSession.query(Entry).get(this_id)
+    form = JournalForm(request.POST, entry)
+    if request.method == 'POST' and form.validate():
+        form.populate_obj(entry)
+        this_id = entry.id
+        return HTTPFound(location='/detail/{}'.format(this_id))
+    return {'form': form}
 
 
 conn_err_msg = """
