@@ -1,12 +1,16 @@
 from pyramid.response import Response
 from pyramid.view import view_config
-from pyramid.httpexceptions import HTTPFound
-from pyramid.security import remember, forget
+from pyramid.httpexceptions import HTTPFound, HTTPForbidden
+from pyramid.security import remember, forget, Allow, Everyone, ALL_PERMISSIONS
 from .form import JournalForm, LoginForm
 from sqlalchemy.exc import DBAPIError
 from sqlalchemy import desc
 import transaction
 import markdown
+from .security import DefaultRoot
+# class example
+# from learning_journal import pwd_context
+# from learning_journal.security import check_pw
 
 from .models import (
     DBSession,
@@ -18,6 +22,18 @@ USERNAME = 'iris'
 PASSWORD = 'password'
 
 
+# class example
+#  @view_config(route_name='login', renderer='templates/login_view.jinja2')
+# def login_view(request):
+#     if request.method == 'POST':
+#         username = request.params.get('username', '')
+#         password = request.params.get('password', '')
+#         if check_pw(password):
+#             header = remember(request, username)
+#             return HTTPFound(location='/', headers=headers)
+#     return {}
+
+
 @view_config(route_name='login', renderer='templates/login_view.jinja2')
 def login_view(request):
     """Login the user."""
@@ -26,21 +42,23 @@ def login_view(request):
 
         if form.data['username'] == USERNAME and \
            form.data['password'] == PASSWORD:
-           headers = remember(request, userid='iris')
-           return HTTPFound(location='/', headers=headers)
+            headers = remember(request, userid='iris')
+            return HTTPFound(location='/', headers=headers)
         # TODO: csrf
         else:
             message = 'login failed'
     else:
         message = 'plz login'
     return {'message': message, 'form': form}
-
+#
+#
 @view_config(route_name='logout', renderer='string')
 def logout_view(request):
     """Logout the user."""
     headers = forget(request)
     return HTTPFound(location='/', headers=headers)
     # TODO: csrf
+
 
 @view_config(route_name='home', renderer='templates/list_view.jinja2')
 def list_view(request):
@@ -83,6 +101,10 @@ def edit_view(request):
         return HTTPFound(location='/detail/{}'.format(this_id))
     return {'form': form}
 
+
+# @view_config(route_name='secure', renderer='string')
+# def secure_view(request):
+#     return 'this view is secured'
 
 conn_err_msg = """
 Pyramid is having a problem using your SQL database.  The problem

@@ -64,9 +64,9 @@ def app(config_path, dbtransaction, test_url):
 @pytest.fixture(scope='function')
 def new_entry(request, dbtransaction):
     """Return a new Entry and flush to the database."""
-entry = Entry(title="test post", text="zomg testing")
-DBSession.add(entry)
-DBSession.flush()
+    entry = Entry(title="test post", text="zomg testing")
+    DBSession.add(entry)
+    DBSession.flush()
 
 def teardown():
     DBSession.query(Entry).filter(Entry.id == entry.id).delete()

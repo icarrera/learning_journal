@@ -2,7 +2,7 @@ from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.authentication import AuthTktAuthenticationPolicy
 from pyramid.config import Configurator
 from sqlalchemy import engine_from_config
-from .security import DefaultRoot
+from learning_journal.security import DefaultRoot
 import os
 
 from .models import (
@@ -35,9 +35,9 @@ def main(global_config, **settings):
     config = Configurator(
         settings=settings,
         root_factory=DefaultRoot,
+        authentication_policy=authentication_policy,
+        authorization_policy=authorization_policy
     )
-    config.set_authentication_policy(authentication_policy)
-    config.set_authorization_policy(authorization_policy)
 
     config.include('pyramid_jinja2')
     config.add_static_view('static', 'static', cache_max_age=3600)
@@ -48,5 +48,7 @@ def main(global_config, **settings):
     config.add_route('edit_view', '/edit/{this_id}')
     config.add_route('login', '/login')
     config.add_route('logout', '/logout')
+    # class example of testing a route
+    # config.add_route('secure', '/secure', permission='gonzo')
     config.scan()
     return config.make_wsgi_app()
