@@ -1,8 +1,8 @@
 from pyramid.authorization import ACLAuthorizationPolicy
-from pyramid.authorization import AuthTktAuthenticationPolicy
+from pyramid.authentication import AuthTktAuthenticationPolicy
 from pyramid.config import Configurator
 from sqlalchemy import engine_from_config
-from .security import DefaultRoot, EntryRoot, userfinder
+from .security import DefaultRoot
 import os
 
 from .models import (
@@ -29,7 +29,6 @@ def main(global_config, **settings):
     authentication_policy = AuthTktAuthenticationPolicy(
         secret=auth_secret,
         hashalg='sha512',
-        callback=userfinder,
     )
     authorization_policy = ACLAuthorizationPolicy()
 
