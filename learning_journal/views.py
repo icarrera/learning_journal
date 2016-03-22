@@ -1,6 +1,7 @@
 from pyramid.response import Response
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
+from pyramid.security import remember, forget
 from .form import JournalForm
 from sqlalchemy.exc import DBAPIError
 from sqlalchemy import desc
@@ -12,6 +13,19 @@ from .models import (
     Entry,
     )
 
+@view_config(route_name='login', renderer='string')
+def login_view(request):
+    """Login the user."""
+    headers = remember(request, userid='iris')
+    return HTTPFound(location='/', headers=headers)
+    # csrf later
+
+@view_config(route_name='logout', renderer='string')
+def logout_view(request):
+    """Logout the user."""
+    headers = forget(request)
+    return HTTPFound(location='/', headers=headers)
+    # csrf later
 
 @view_config(route_name='home', renderer='templates/list_view.jinja2', permission='view')
 def list_view(request):
