@@ -28,7 +28,7 @@ def main(global_config, **settings):
     authentication_policy=AuthTktAuthenticationPolicy(
         secret=auth_secret,
         hashalg='sha512',
-        callback=userfinder
+        callback=userfinder,
     )
     config = Configurator(settings=settings)
     config.include('pyramid_jinja2')
