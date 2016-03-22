@@ -2,7 +2,7 @@ from pyramid.response import Response
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
 from pyramid.security import remember, forget
-from .form import JournalForm
+from .form import JournalForm, LoginForm
 from sqlalchemy.exc import DBAPIError
 from sqlalchemy import desc
 import transaction
@@ -13,27 +13,42 @@ from .models import (
     Entry,
     )
 
-@view_config(route_name='login', renderer='string')
+
+USERNAME = 'iris'
+PASSWORD = 'password'
+
+
+@view_config(route_name='login', renderer='templates/login_view.jinja2')
 def login_view(request):
     """Login the user."""
-    headers = remember(request, userid='iris')
-    return HTTPFound(location='/', headers=headers)
-    # csrf later
+    form = LoginForm(request.POST)
+    if request.method == "POST" and form.validate():
+
+        if form.data['username'] == USERNAME and \
+           form.data['password'] == PASSWORD:
+           headers = remember(request, userid='iris')
+           return HTTPFound(location='/', headers=headers)
+        # TODO: csrf
+        else:
+            message = 'login failed'
+    else:
+        message = 'plz login'
+    return {'message': message, 'form': form}
 
 @view_config(route_name='logout', renderer='string')
 def logout_view(request):
     """Logout the user."""
     headers = forget(request)
     return HTTPFound(location='/', headers=headers)
-    # csrf later
+    # TODO: csrf
 
-@view_config(route_name='home', renderer='templates/list_view.jinja2', permission='view')
+@view_config(route_name='home', renderer='templates/list_view.jinja2')
 def list_view(request):
     """Handle the view of our home page."""
     return {'entries': DBSession.query(Entry).order_by(desc(Entry.created)).all()}
 
 
-@view_config(route_name='detail_view', renderer='templates/detail_view.jinja2', permission='view')
+@view_config(route_name='detail_view', renderer='templates/detail_view.jinja2')
 def detail_view(request):
     """Handle the view of a single journaly entry."""
     md = markdown.Markdown(safe_mode='replace', html_replacement_text='NO')

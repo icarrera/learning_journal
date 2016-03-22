@@ -1,4 +1,4 @@
-from wtforms import Form, BooleanField, StringField, validators, TextAreaField
+from wtforms import Form, StringField, validators, TextAreaField
 
 
 class JournalForm(Form):
@@ -8,4 +8,8 @@ class JournalForm(Form):
     text = TextAreaField('text')
 
 
-form = JournalForm()
+class LoginForm(Form):
+
+    """Create a login form for user authentication."""
+    username = StringField('username', [validators.Length(min=1)])
+    password = StringField('password', [validators.Length(min=5)])
