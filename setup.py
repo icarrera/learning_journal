@@ -20,7 +20,8 @@ requires = [
     'psycopg2',
     'markdown',
     'wtforms',
-    'webob'
+    'webob',
+    'pyramid-auth'
     ]
 
 tests_require = ['pytest', 'pytest-watch', 'tox']
