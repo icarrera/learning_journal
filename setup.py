@@ -21,7 +21,6 @@ requires = [
     'markdown',
     'wtforms',
     'webob',
-    'pyramid-auth'
     ]
 
 tests_require = ['pytest', 'pytest-watch', 'tox']
