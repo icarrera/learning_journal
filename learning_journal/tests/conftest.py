@@ -63,7 +63,7 @@ def app(config_path, dbtransaction, test_url):
 
 @pytest.fixture(scope='function')
 def new_entry(request, dbtransaction):
-"""Return a new Entry and flush to the database."""
+    """Return a new Entry and flush to the database."""
 entry = Entry(title="test post", text="zomg testing")
 DBSession.add(entry)
 DBSession.flush()
@@ -71,11 +71,11 @@ DBSession.flush()
 def teardown():
     DBSession.query(Entry).filter(Entry.id == entry.id).delete()
 
-request.addfinalizer(teardown)
-return entry
+    request.addfinalizer(teardown)
+    return entry
 
 
-@pytest.fixture():
+@pytest.fixture()
 def dummy_request():
     request = testing.DummyRequest()
     config = testing.setUp()
