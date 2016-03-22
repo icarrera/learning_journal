@@ -3,6 +3,9 @@
 {% block content %}
     <h2>{{entry.title}}</h2>
     <p>{{ text|safe}}</p>
+
+    {% if request.has_permission('edit') %}
     <a href="{{request.route_url('edit_view', this_id=entry.id)}}"><button>Edit Entry</button></a>
+    {% endif %}
 
 {% endblock %}
