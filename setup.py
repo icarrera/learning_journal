@@ -23,7 +23,7 @@ requires = [
     'webob',
     ]
 
-tests_require = ['pytest', 'pytest-watch', 'tox']
+tests_require = ['pytest', 'pytest-watch', 'tox', 'webtest']
 dev_requires = ['ipython', 'pyramid-ipython']
 
 setup(name='learning_journal',
