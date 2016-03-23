@@ -1,29 +1,32 @@
 # -*- coding: utf-8 -*-
-# from pyramid.testing import DummyRequest
-# from learning_journal.models import Entry, DBSession
-# import webtest
-# import pytest
-# from learning_journal.views import (
-#     list_view,
-#     detail_view,
-#     add_view,
-#     edit_view
-#     )
+from pyramid.testing import DummyRequest
+
+def test_list_view(new_entry):
+    """Test if the list view returns the expected title."""
+    from learning_journal.views import list_view
+    response = list_view(DummyRequest())
+    assert response['entries'][0].title == "test post"
 
 
-# def test_add_view_text(dbtransaction):
-#     """Test for entry view dictionary text attribute."""
-#     new_model = Entry(title="test 1", text='test text')
-#     DBSession.add(new_model)
-#     DBSession.flush()
-#     test_request = DummyRequest()
-#     test_request.matchdict = {'id': new_model.id}
-#     dic = add_view(test_request)
-#     assert dic['entry'].text == 'text text'
-#
-#
-#
-# def test_home_route(dbtransaction, app):
-#     """Test our home route."""
-#     response = app.get('/')
-#     assert response.status_code == 200
+def test_detail_view_unit(new_entry):
+    """Test if the detail view returns the expected title and text."""
+    from learning_journal.views import detail_view
+    this_id = str(new_entry.id)
+    req = DummyRequest()
+    req.matchdict = {'this_id': this_id}
+    response = detail_view(req)
+    assert response['entry'].title == 'test post'
+    assert response['entry'].text == 'zomg testing'
+
+
+def test_home_route_fxn(dbtransaction, app):
+    """Test our home route functionality."""
+    response = app.get('/')
+    assert response.status_code == 200
+
+
+def test_detail_view_fxn(new_entry, app):
+    """Test detail route functionality."""
+    response = app.get('/detail/{}'.format(new_entry.id))
+    assert response.status_code == 200
+    assert new_entry.title in response

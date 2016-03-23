@@ -3,7 +3,6 @@ import os
 import pytest
 from sqlalchemy import create_engine
 from learning_journal.models import DBSession, Base, Entry
-from pyramid.paster import get_appsettings
 from webtest import TestApp
 from learning_journal import main
 
@@ -53,10 +52,9 @@ def dummy_post(dbtransaction):
 
 
 @pytest.fixture()
-def app(config_path, dbtransaction, test_url):
+def app(dbtransaction):
     """Create pretend app fixture of main app to test routing."""
-    settings = get_appsettings(config_path)
-    settings['sqlalchemy.url'] = test_url
+    settings = {'sqlalchemy.url': TEST_DATABASE_URL}
     app = main({}, **settings)
     return TestApp(app)
 
@@ -67,19 +65,4 @@ def new_entry(request, dbtransaction):
     entry = Entry(title="test post", text="zomg testing")
     DBSession.add(entry)
     DBSession.flush()
-
-def teardown():
-    DBSession.query(Entry).filter(Entry.id == entry.id).delete()
-
-    request.addfinalizer(teardown)
     return entry
-
-
-@pytest.fixture()
-def dummy_request():
-    request = testing.DummyRequest()
-    config = testing.setUp()
-    config.add_route('home', '/')
-    config.add_route('add_view', '/add')
-    config.add_route('detail_view', '/detail/{this_id}')
-    config.add_route('edit_view', '/edit/{this_id}')
