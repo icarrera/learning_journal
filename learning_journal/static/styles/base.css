@@ -13,3 +13,7 @@ a {
     text-decoration: none;
     font-weight:bold;
 }
+
+form {
+    color: black;
+}
