@@ -1,5 +1,5 @@
 .nav_links {
-    border-radius: 5px;
+    margin-top: 1%;
     margin-bottom: 1%;
 }
 
@@ -16,13 +16,17 @@
 
 .main_header {
     text-align: center;
-    background-color: #D44C46;
-    border-radius: 5px;
-    padding: 2%;
+    background-color: rgba(43, 43, 109, 0.64);
+    padding: 3%;
 }
 
 .main_header h1 {
     padding-top: 1%;
     font-weight: bold;
     font-size: 4em;
+}
+
+.main_block {
+    padding: 2%;
+    background-color: rgba(43, 43, 109, 0.64);
 }

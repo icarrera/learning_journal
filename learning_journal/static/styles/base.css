@@ -1,8 +1,11 @@
 body {
     margin: 3%;
-    background-color: #153B50;
     color: #ECEBE4;
     font-family: 'Open Sans', sans-serif;
+    background-image: url(/static/book.jpg);
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 ul {
