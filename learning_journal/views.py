@@ -1,6 +1,6 @@
 from pyramid.response import Response
 from pyramid.view import view_config
-from pyramid.httpexceptions import HTTPFound, HTTPForbidden
+from pyramid.httpexceptions import HTTPFound
 from pyramid.security import remember, forget, Allow, Everyone, ALL_PERMISSIONS
 from .form import JournalForm, LoginForm
 from sqlalchemy.exc import DBAPIError
@@ -9,7 +9,6 @@ import transaction
 import markdown
 from .security import DefaultRoot
 import os
-# class example
 from passlib.apps import custom_app_context as pwd_context
 from .security import check_password
 
@@ -84,10 +83,6 @@ def edit_view(request):
         return HTTPFound(location='/detail/{}'.format(this_id))
     return {'form': form}
 
-
-# @view_config(route_name='secure', renderer='string')
-# def secure_view(request):
-#     return 'this view is secured'
 
 conn_err_msg = """
 Pyramid is having a problem using your SQL database.  The problem
