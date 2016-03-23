@@ -8,9 +8,10 @@ from sqlalchemy import desc
 import transaction
 import markdown
 from .security import DefaultRoot
+import os
 # class example
-# from learning_journal import pwd_context
-# from learning_journal.security import check_pw
+from passlib.apps import custom_app_context as pwd_context
+from .security import check_password
 
 from .models import (
     DBSession,
@@ -18,46 +19,28 @@ from .models import (
     )
 
 
-USERNAME = 'iris'
-PASSWORD = 'password'
-
-
-# class example
-#  @view_config(route_name='login', renderer='templates/login_view.jinja2')
-# def login_view(request):
-#     if request.method == 'POST':
-#         username = request.params.get('username', '')
-#         password = request.params.get('password', '')
-#         if check_pw(password):
-#             header = remember(request, username)
-#             return HTTPFound(location='/', headers=headers)
-#     return {}
-
-
 @view_config(route_name='login', renderer='templates/login_view.jinja2')
 def login_view(request):
     """Login the user."""
     form = LoginForm(request.POST)
-    if request.method == "POST" and form.validate():
-
-        if form.data['username'] == USERNAME and \
-           form.data['password'] == PASSWORD:
-            headers = remember(request, userid='iris')
+    if request.method == 'POST' and form.validate():
+        username = request.params.get('username', '')
+        password = request.params.get('password', '')
+        if check_password(password):
+            headers = remember(request, username)
             return HTTPFound(location='/', headers=headers)
-        # TODO: csrf
         else:
             message = 'login failed'
     else:
-        message = 'plz login'
+        message = 'please login'
     return {'message': message, 'form': form}
-#
-#
+
+
 @view_config(route_name='logout', renderer='string')
 def logout_view(request):
     """Logout the user."""
     headers = forget(request)
     return HTTPFound(location='/', headers=headers)
-    # TODO: csrf
 
 
 @view_config(route_name='home', renderer='templates/list_view.jinja2')
