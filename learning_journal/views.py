@@ -1,16 +1,45 @@
 from pyramid.response import Response
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
-from .form import JournalForm
+from pyramid.security import remember, forget, Allow, Everyone, ALL_PERMISSIONS
+from .form import JournalForm, LoginForm
 from sqlalchemy.exc import DBAPIError
 from sqlalchemy import desc
 import transaction
 import markdown
+from .security import DefaultRoot
+import os
+from passlib.apps import custom_app_context as pwd_context
+from .security import check_password
 
 from .models import (
     DBSession,
     Entry,
     )
+
+
+@view_config(route_name='login', renderer='templates/login_view.jinja2')
+def login_view(request):
+    """Login the user."""
+    form = LoginForm(request.POST)
+    if request.method == 'POST' and form.validate():
+        username = request.params.get('username', '')
+        password = request.params.get('password', '')
+        if check_password(password):
+            headers = remember(request, username)
+            return HTTPFound(location='/', headers=headers)
+        else:
+            message = 'login failed'
+    else:
+        message = 'please login'
+    return {'message': message, 'form': form}
+
+
+@view_config(route_name='logout', renderer='string')
+def logout_view(request):
+    """Logout the user."""
+    headers = forget(request)
+    return HTTPFound(location='/', headers=headers)
 
 
 @view_config(route_name='home', renderer='templates/list_view.jinja2')
@@ -29,7 +58,7 @@ def detail_view(request):
     return {'entry': entry, 'text': text}
 
 
-@view_config(route_name='add_view', renderer='templates/add_view.jinja2')
+@view_config(route_name='add_view', renderer='templates/add_view.jinja2', permission='add')
 def add_view(request):
     """Handle the view of our adding new entry page."""
     form = JournalForm(request.POST)
@@ -42,7 +71,7 @@ def add_view(request):
     return {'form': form}
 
 
-@view_config(route_name='edit_view', renderer='templates/add_view.jinja2')
+@view_config(route_name='edit_view', renderer='templates/add_view.jinja2', permission='edit')
 def edit_view(request):
     """Handle the view of our edit entry page."""
     this_id = request.matchdict['this_id']

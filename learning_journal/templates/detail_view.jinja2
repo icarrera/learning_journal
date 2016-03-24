@@ -1,8 +1,11 @@
 {% extends "base.jinja2" %}
 
 {% block content %}
-    <h2>{{entry.title}}</h2>
+    <h2>{{entry.title}} <i>{{entry.created}}</i></h2>
     <p>{{ text|safe}}</p>
+
+    {% if request.has_permission('edit') %}
     <a href="{{request.route_url('edit_view', this_id=entry.id)}}"><button>Edit Entry</button></a>
+    {% endif %}
 
 {% endblock %}

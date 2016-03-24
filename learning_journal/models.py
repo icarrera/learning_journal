@@ -8,7 +8,6 @@ from sqlalchemy import (
 
 from sqlalchemy.ext.declarative import declarative_base
 import datetime
-import psycopg2
 
 from sqlalchemy.orm import (
     scoped_session,
