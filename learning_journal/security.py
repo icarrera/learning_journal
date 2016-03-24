@@ -26,12 +26,13 @@ class DefaultRoot(object):
     def __init__(self, request):
         self.request = request
 
+
 class SuperSecureForm(SecureForm):
     """Secure a form with CSRF protection."""
 
     def generate_csrf_token(self, csrf_context):
         """Generate a CSRF Token."""
-        params = SECRET_KEY + crsf_context
+        params = SECRET_KEY + csrf_context
         token = md5(params.encode('utf-8')).hexdigest()
         return token
 
