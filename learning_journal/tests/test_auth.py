@@ -3,6 +3,7 @@ import webtest
 import os
 from learning_journal.models import Entry
 from learning_journal import main
+import passlib
 
 
 AUTH_DATA = {'username': 'admin', 'password': 'secret'}

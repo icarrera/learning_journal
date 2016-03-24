@@ -21,6 +21,7 @@ requires = [
     'markdown',
     'wtforms',
     'webob',
+    'passlib'
     ]
 
 tests_require = ['pytest', 'pytest-watch', 'tox', 'webtest']

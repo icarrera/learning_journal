@@ -27,6 +27,9 @@ def dbtransaction(request, sqlengine):
     connection = sqlengine.connect()
     transaction = connection.begin()
     DBSession.configure(bind=connection)
+    entry = Entry(title="testing 1", text="this is a test")
+    DBSession.add(entry)
+    DBSession.flush()
 
     def teardown():
         transaction.rollback()
