@@ -57,3 +57,6 @@ setup(name='learning_journal',
       initialize_db = learning_journal.scripts.initializedb:main
       """,
       )
+
+      #  load_api = learning_journal.scripts.load_class_api:main .
+      #  insert above , use requests library to make request to cris' api.
