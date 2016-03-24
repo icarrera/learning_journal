@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from pyramid.testing import DummyRequest
 
+
 def test_list_view(new_entry):
     """Test if the list view returns the expected title."""
     from learning_journal.views import list_view
