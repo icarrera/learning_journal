@@ -27,10 +27,8 @@ def main(global_config, **settings):
     DBSession.configure(bind=engine)
     Base.metadata.bind = engine
 
-    auth_secret = os.environ.get('AUTH_SECRET', 'secretstuff')
-    authentication_policy = AuthTktAuthenticationPolicy(
-        secret=auth_secret
-    )
+    secret = os.environ.get('AUTH_SECRET', 'secretstuff')
+    authentication_policy = AuthTktAuthenticationPolicy(secret, hashalg='sha512')
     authorization_policy = ACLAuthorizationPolicy()
 
     config = Configurator(
