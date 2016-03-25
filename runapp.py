@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 from paste.deploy import loadapp
 from waitress import serve
