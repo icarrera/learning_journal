@@ -21,15 +21,14 @@ def make_session(settings):
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
+    if 'DATABASE_URL' in os.environ:
+        settings['sqlalchemy.url'] = os.environ['DATABASE_URL']
     engine = engine_from_config(settings, 'sqlalchemy.')
     DBSession.configure(bind=engine)
     Base.metadata.bind = engine
 
-    auth_secret = os.environ.get('LJ_AUTH_SECRET', 'secretstuff')
-    authentication_policy = AuthTktAuthenticationPolicy(
-        secret=auth_secret,
-        hashalg='sha512',
-    )
+    secret = os.environ.get('AUTH_SECRET', 'secretstuff')
+    authentication_policy = AuthTktAuthenticationPolicy(secret, hashalg='sha512')
     authorization_policy = ACLAuthorizationPolicy()
 
     config = Configurator(
