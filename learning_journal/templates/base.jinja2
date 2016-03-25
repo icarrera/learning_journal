@@ -12,22 +12,26 @@
     <link rel="stylesheet" type="text/css" href="/static/styles/state.css">
 </head>
 <body>
-    <header class="main_header">
-        <h1>Iris's Learning Journal</h1>
-        <nav class="nav_links">
-            <ul>
-                <li><a href="/"><button>Home</button></a></li>
-                {% if request.has_permission('add') %}
-                <li><a href="/add"><button>Add Entry</button></a></li>
-                {% endif %}
-                <li><a href="/login"><button>Login</button></a></li>
-                <li><a href="/logout"><button>Logout</button></a></li>
-            </ul>
-        </nav>
-    </header>
-    <section class="main_block">
-    {% block content %}
-    {% endblock content %}
-    </section>
+    <main class="main_block">
+        <header class="main_header">
+            <h1>Iris Carrera</h1>
+            <h1>Python Learning Journal</h1>
+            <h4>reflections on my triumphs and struggles</h4>
+            <nav class="nav_links">
+                <ul>
+                    <li><a href="/"><button>Home</button></a></li>
+                    {% if request.has_permission('add') %}
+                    <li><a href="/add"><button>Add Entry</button></a></li>
+                    {% endif %}
+                    <li><a href="/login"><button>Login</button></a></li>
+                    <li><a href="/logout"><button>Logout</button></a></li>
+                </ul>
+            </nav>
+        </header>
+        <section>
+            {% block content %}
+            {% endblock content %}
+        </section>
+    </main>
 </body>
 </html>

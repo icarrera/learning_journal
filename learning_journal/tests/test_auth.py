@@ -21,11 +21,19 @@ def authenticated_app(app, auth_env):
     app.post('/login', AUTH_DATA)
     return app
 
+
 @pytest.fixture()
 def auth_env():
     from learning_journal.security import pwd_context
     os.environ['AUTH_PASSWORD'] = pwd_context.encrypt('secret')
     os.environ['AUTH_USERNAME'] = 'admin'
+
+
+@pytest.fixture()
+def csrf_input():
+    response.html.find('input', id='csrf_token')
+    input.get('value')
+
 
 # this is a functional test
 def test_no_access_to_view(app):
@@ -60,6 +68,7 @@ def test_check_pw_success(auth_env):
     password = 'not secret'
     assert not check_password(password)
 
+
 # another functional test
 def test_get_login_view(app):
     response = app.get('/login')
@@ -67,8 +76,12 @@ def test_get_login_view(app):
 
 
 def test_post_login_success(app, auth_env):
-    response = app.post('/login', AUTH_DATA)
+    response = app.get('/login')
+    # import pdb; pdb.set_trace()
+    response = app.post('/login', params=AUTH_DATA)
+    response.html.find('input', id='csrf_token')
     assert response.status_code == 302
+
 
 def test_post_login_success_redirects_home(app, auth_env):
     response = app.post('/login', AUTH_DATA)
@@ -76,6 +89,7 @@ def test_post_login_success_redirects_home(app, auth_env):
     domain = "http://localhost"
     actual_path = headers.get('Location', '')[len(domain):]
     assert actual_path == '/'
+
 
 def test_post_login_success_auth_tkt_present(app, auth_env):
     response = app.post('/login', AUTH_DATA)
@@ -87,6 +101,7 @@ def test_post_login_success_auth_tkt_present(app, auth_env):
             break
     else:
         assert False
+
 
 def test_post_login_fail(app, auth_env):
     data = {'username': 'admin', 'password': 'blahh'}

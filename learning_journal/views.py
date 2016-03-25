@@ -1,15 +1,10 @@
 from pyramid.response import Response
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
-from pyramid.security import remember, forget, Allow, Everyone, ALL_PERMISSIONS
+from pyramid.security import remember, forget
 from .form import JournalForm, LoginForm
-from sqlalchemy.exc import DBAPIError
 from sqlalchemy import desc
-import transaction
 import markdown
-from .security import DefaultRoot
-import os
-from passlib.apps import custom_app_context as pwd_context
 from .security import check_password
 
 from .models import (
@@ -21,7 +16,8 @@ from .models import (
 @view_config(route_name='login', renderer='templates/login_view.jinja2')
 def login_view(request):
     """Login the user."""
-    form = LoginForm(request.POST)
+    context = get_auth_tkt(request)
+    form = LoginForm(request.POST, csrf_context=context)
     if request.method == 'POST' and form.validate():
         username = request.params.get('username', '')
         password = request.params.get('password', '')
@@ -61,7 +57,8 @@ def detail_view(request):
 @view_config(route_name='add_view', renderer='templates/add_view.jinja2', permission='add')
 def add_view(request):
     """Handle the view of our adding new entry page."""
-    form = JournalForm(request.POST)
+    context = get_auth_tkt(request)
+    form = JournalForm(request.POST, csrf_context=context)
     if request.method == "POST" and form.validate():
         new_entry = Entry(title=form.title.data, text=form.text.data)
         DBSession.add(new_entry)
@@ -76,7 +73,8 @@ def edit_view(request):
     """Handle the view of our edit entry page."""
     this_id = request.matchdict['this_id']
     entry = DBSession.query(Entry).get(this_id)
-    form = JournalForm(request.POST, entry)
+    context = get_auth_tkt(request)
+    form = JournalForm(request.POST, entry, csrf_context=context)
     if request.method == 'POST' and form.validate():
         form.populate_obj(entry)
         this_id = entry.id
@@ -84,18 +82,11 @@ def edit_view(request):
     return {'form': form}
 
 
-conn_err_msg = """
-Pyramid is having a problem using your SQL database.  The problem
-might be caused by one of the following things:
-
-1.  You may need to run the "initialize_learning_journal_db" script
-    to initialize your database tables.  Check your virtual
-    environment's "bin" directory for this script and try to run it.
-
-2.  Your database server may not be running.  Check that the
-    database server referred to by the "sqlalchemy.url" setting in
-    your "development.ini" file is running.
-
-After you fix the problem, please restart the Pyramid application to
-try it again.
-"""
+def get_auth_tkt(request):
+    """Get an auth_tkt from a request for use with CSRF protection."""
+    request_cookies = request.headers.items()
+    auth_tkts = [value for cookie, value in request_cookies
+                 if cookie == 'Cookie' and value.startswith('auth_tkt')]
+    if not auth_tkts:
+        return ''
+    return auth_tkts[0]

@@ -3,14 +3,17 @@
 {% block content %}
 <h3> {{message}} </h3>
 <form action='' method='POST'>
-<div>
-    {{ form.username }}
-</div>
+    {{ form.csrf_token }}
+    <div>
+        {{ form.username.label}}
+        {{ form.username }}
+    </div>
 
-<div>
-    {{ form.password }}
-</div>
-<div><INPUT TYPE="submit" VALUE="submit"></div>
+    <div>
+        {{ form.password.label }}
+        {{ form.password }}
+    </div>
+    <div><INPUT TYPE="submit" VALUE="submit"></div>
 </form>
 
 {% endblock %}

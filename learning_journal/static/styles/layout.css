@@ -1,6 +1,7 @@
 .nav_links {
     margin-top: 1%;
     margin-bottom: 1%;
+    padding: 1%;
 }
 
 .nav_links li {
@@ -16,17 +17,18 @@
 
 .main_header {
     text-align: center;
-    background-color: rgba(43, 43, 109, 0.64);
     padding: 3%;
 }
 
 .main_header h1 {
-    padding-top: 1%;
     font-weight: bold;
     font-size: 4em;
 }
 
 .main_block {
-    padding: 2%;
+    padding: 1%;
+    padding-bottom: 5%;
     background-color: rgba(43, 43, 109, 0.64);
+    max-width: 100%;
+    border-radius: 5px;
 }

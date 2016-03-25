@@ -3,7 +3,7 @@
 
 {% for entry in entries %}
 <ul><a href="{{request.route_url('detail_view', this_id=entry.id)}}">
-<li>{{entry.title}} <i>{{entry.created}}</i></li>
+<li>{{entry.title}} <i>{{entry.created.strftime('%Y-%m-%d at %H:%M UTC')}}</i></li>
 </a>
 </ul>
 {% endfor %}
