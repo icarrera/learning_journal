@@ -3,7 +3,7 @@ body {
     color: #ECEBE4;
     font-family: 'Open Sans', sans-serif;
     background-image: url(/static/book.jpg);
-    background-size: 100%;
+    background-size: 100% 100%;
     background-repeat: no-repeat;
     background-attachment: fixed;
 }
